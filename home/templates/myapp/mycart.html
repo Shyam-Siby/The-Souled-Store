@@ -1,0 +1,76 @@
+{% extends 'myapp/Base.html' %}
+{% load static %}
+{% block title %} Purchase{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center mt-4 mb-3">Items in Your Cart, {{ u.first_name }}</h2>
+            <div class="cart-messages">
+                {% for message in messages %}
+                    <div class="alert alert-info" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% if coupon_applied %}
+                <!-- Apply Coupon Form -->
+                <!-- You can uncomment and style this form if needed -->
+            {% endif %}
+
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Product</th>
+                            <th>Size</th>
+                            <th>Rate</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cp in cart.cartproduct_set.all %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ cp.product.name }}</td>
+                                <td>{{ cp.size }}</td>
+                                <td>{{ cp.rate }}</td>
+                                <td>{{ cp.quantity }}</td>
+                                <td>{{ cp.subtotal }}</td>
+                                <td>
+                                    <a href="managecart/{{ cp.id }}?action=inc" class="btn btn-sm btn-success">+</a>
+                                    <a href="managecart/{{ cp.id }}?action=dcr" class="btn btn-sm btn-warning">-</a>
+                                    <a href="managecart/{{ cp.id }}?action=rmv" class="btn btn-sm btn-danger">x</a>
+                                </td>
+                            </tr>
+                            {% if cp.quantity > cp.product.stock %}
+                                <tr>
+                                    <td colspan="7" class="text-danger">Product quantity exceeds available stock.</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        <tr>
+                            <td colspan="5" class="text-right">Total</td>
+                            <td colspan="2">Rs. {{ total }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            {% if cart.cartproduct_set.all %}
+                <div class="text-center mt-4">
+                    <a href="empty-cart" class="btn btn-outline-danger mr-3">Empty Cart</a>
+                    <a href="checkout" class="btn btn-outline-primary">Checkout</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

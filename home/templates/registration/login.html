@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}"> <!-- Adjust if your CSS file has a different path -->
+  <style>
+    body {
+        {% comment %} background-image: url('https://images.pexels.com/photos/4612163/pexels-photo-4612163.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); {% endcomment %}
+        background-size: cover; /* Cover the entire page */
+        background-position: center; /* Center the background image */
+        background-repeat: no-repeat; /* Do not repeat the image */
+    }
+    
+    .form-container {
+      max-width: 400px;
+      margin: 2rem auto;
+      padding: 2rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.8); /* Optional: Add a semi-transparent background to the form container */
+    }
+    
+    .form-field {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    
+    .form-field:focus {
+      border-color: #007bff;
+    }
+    
+    .submit-btn {
+      width: 100%;
+      padding: 10px;
+      background-color: #d81a1a;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .submit-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Login</h2>
+    <form method="POST">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group">
+          <label>{{ field.label }}</label>
+          {% if field.name == 'password' %}
+            <input type="password" class="form-field" name="{{ field.name }}" autocomplete="off">
+          {% else %}
+            <input type="{{ field.type }}" class="form-field" name="{{ field.name }}">
+          {% endif %}
+          {% if field.help_text %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+          {% endif %}
+          {% for error in field.errors %}
+            <div class="alert alert-danger">{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="submit-btn">Login</button>
+    </form>
+    
+    <div class="link">
+      <span>Don't have an account? <a href="/signup">Sign Up</a></span>
+  
+      <span>Forget Password?<a href="{% url 'clothapp:forget_password' %}">click here</a></span>
+    </div>
+    <br><br> <div class="link">
+      <span>Admin Login <a href="/AdminLogin">Admin Login</a></span>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+{% extends 'myapp/Base.html' %}
+{% load static %}
+
+{% block body %}
+<style>
+    /* Container styling */
+    .shipping-form-container {
+        max-width: 500px;
+        background-color: #f9f9f9;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 30px;
+        margin: 50px auto;
+    }
+
+    /* Form styling */
+    .shipping-form-container form {
+        margin-top: 20px;
+    }
+
+    .shipping-form-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .shipping-form-container label {
+        font-weight: bold;
+    }
+
+    .shipping-form-container input[type="text"],
+    .shipping-form-container input[type="email"],
+    .shipping-form-container input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .shipping-form-container button {
+        width: 100%;
+        padding: 12px 0;
+        margin-top: 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .shipping-form-container button:hover {
+        background-color: #45a049;
+    }
+
+    /* Error message styling */
+    .shipping-form-container .error {
+        color: #ff0000;
+        font-size: 0.8em;
+        margin-top: 5px;
+    }
+</style>
+
+<div class="shipping-form-container">
+    <h2>Edit Your Profile</h2>
+    <form action="{% url 'clothapp:EditProfile' %}" method="POST">
+        {% csrf_token %}
+
+        <label for="firstName">First Name:</label>
+        <input type="text" name="first_name" id="firstName" value="{{ a.first_name }}">
+        {% if errors.firstName_error %}
+            <div class="error">{{ errors.firstName_error }}</div>
+        {% endif %}
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" name="last_name" id="lastName" value="{{ a.last_name }}">
+        {% if errors.lastName_error %}
+            <div class="error">{{ errors.lastName_error }}</div>
+        {% endif %}
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" value="{{ a.email }}">
+        {% if errors.email_error %}
+            <div class="error">{{ errors.email_error }}</div>
+        {% endif %}
+
+        <label for="new_password">New Password:</label>
+        <input type="password" name="new_password" id="new_password">
+        {% if errors.password_complexity_error %}
+            <div class="error">{{ errors.password_complexity_error }}</div>
+        {% endif %}
+        
+        <label for="confirm_new_password">Confirm New Password:</label>
+        <input type="password" name="confirm_new_password" id="confirm_new_password">
+        {% if errors.password_match_error %}
+            <div class="error">{{ errors.password_match_error }}</div>
+        {% endif %}
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+{% endblock %}
